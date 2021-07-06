@@ -9,9 +9,9 @@ import (
 	"syscall"
 	"time"
 	"github.com/megaproaktiv/awsummary"
-	"github.com/megaproaktiv/awsummary/stacks"
+	"github.com/megaproaktiv/awsummary/sumcloudformation"
 	"github.com/megaproaktiv/awsummary/sumec2"
-	"github.com/megaproaktiv/awsummary/sumelb"
+	"github.com/megaproaktiv/awsummary/sumlb"
 	logs "github.com/sirupsen/logrus"
 )
 
@@ -40,7 +40,7 @@ var (
 	logfile                                                              string
 	s3Number                                                             int
 	totalInstancesStats sumec2.InstancesTotals
-	totalAlbNumber	int
+	totalLbStats	sumlb.LBV2Totals
 	totalRdsNumber, totalOrRdsNumber, totalMyRdsNumber, totalMsRdsNumber int
 	totalLambdaNumber                                                    int
 	totalCfnNumber                                                       int
@@ -80,7 +80,7 @@ func main() {
 				go func() {
 					defer wg.Done()
 					// Getting EC2 data
-					instancesStats := instances.List(region, verbose)
+					instancesStats := sumec2.List(region, verbose)
 					if instancesStats.Total > 0 {
 						logs.WithFields(logs.Fields{
 							"EC2":              instancesStats.Total,
@@ -106,14 +106,19 @@ func main() {
 				go func() {
 					defer wg.Done()
 					// Getting ELB data
-					rElbTotal := sumelb.List(region, verbose)
-					if rElbTotal > 0 {
+					regionLBStat := sumlb.List(region, verbose)
+					sum := regionLBStat.Application+regionLBStat.Gateway+regionLBStat.Network
+					if sum > 0 {
 						logs.WithFields(logs.Fields{
-							"ELB":      rElbTotal,
+							"ALB":      regionLBStat.Application,
+							"NLB":      regionLBStat.Network,
+							"GLB":      regionLBStat.Gateway,
 							"Region":   region,
 						}).Info(awsummary.Msg("ELB"))
 					}
-					totalAlbNumber += rElbTotal
+					totalLbStats.Application += regionLBStat.Application
+					totalLbStats.Network += regionLBStat.Network
+					totalLbStats.Gateway += regionLBStat.Gateway
 				}()
 
 				// Getting RDS data
@@ -154,7 +159,7 @@ func main() {
 				wg.Add(1)
 				go func() {
 					defer wg.Done()
-					rCfnTotal := stacks.List(region, verbose)
+					rCfnTotal := sumcloudformation.List(region, verbose)
 					if rCfnTotal > 0 {
 						logs.WithFields(logs.Fields{
 							"Stacks": rCfnTotal,
@@ -180,7 +185,9 @@ func main() {
 				"EC2":               totalInstancesStats.Total,
 				"EC2Running":        totalInstancesStats.Running,
 				"EC2RunningWindows": totalInstancesStats.Windows,
-				"ALB":               totalAlbNumber,
+				"ALB":               totalLbStats.Application,
+				"GLB":               totalLbStats.Gateway,
+				"NLB":               totalLbStats.Network,
 				"ElasticsearchDomains:": totalESNumber,
 				"RDS":               totalRdsNumber,
 				"RDS_Oracle":        totalOrRdsNumber,
