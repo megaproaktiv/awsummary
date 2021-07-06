@@ -1,6 +1,6 @@
-# awssummary
+# awsummary
 
-`awssummary` is a script to get a fast (< 3 seconds) AWS account overview of pricey or often used services in all 13 regions.
+`awsummary` is a script to get a fast (< 3 seconds) AWS account overview of pricey or often used services in all 13 regions.
 
 Available details are (number of):
 * EC2, EC2 Running instances, EC2 Windows running instances
