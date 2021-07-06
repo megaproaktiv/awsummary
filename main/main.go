@@ -10,6 +10,8 @@ import (
 	"time"
 	"github.com/megaproaktiv/awsummary"
 	"github.com/megaproaktiv/awsummary/stacks"
+	"github.com/megaproaktiv/awsummary/sumec2"
+	"github.com/megaproaktiv/awsummary/sumelb"
 	logs "github.com/sirupsen/logrus"
 )
 
@@ -20,6 +22,7 @@ var (
 		"eu-west-3",
 		"eu-west-2",
 		"eu-west-1",
+		"ap-northeast-3",
 		"ap-northeast-2",
 		"ap-northeast-1",
 		"sa-east-1",
@@ -36,8 +39,8 @@ var (
 	repeat                                                               int
 	logfile                                                              string
 	s3Number                                                             int
-	totalEC2Number, totalEC2RunningNumber, totalEC2RunningWindowsNumber  int
-	totalElbNumber, totalElbWithoutEC2Number                             int
+	totalInstancesStats sumec2.InstancesTotals
+	totalAlbNumber	int
 	totalRdsNumber, totalOrRdsNumber, totalMyRdsNumber, totalMsRdsNumber int
 	totalLambdaNumber                                                    int
 	totalCfnNumber                                                       int
@@ -57,6 +60,8 @@ func init() {
 }
 
 func main() {
+	os.Setenv("AUTO_INIT", "true")
+
 	// Make sure the credentials exists
 	awsummary.CheckConfig()
 
@@ -75,18 +80,18 @@ func main() {
 				go func() {
 					defer wg.Done()
 					// Getting EC2 data
-					rTotal, rRunning, rWindows := awsummary.ListEC2(region, verbose)
-					if rTotal > 0 {
+					instancesStats := instances.List(region, verbose)
+					if instancesStats.Total > 0 {
 						logs.WithFields(logs.Fields{
-							"EC2":               rTotal,
-							"EC2Running":        rRunning,
-							"EC2RunningWindows": rWindows,
+							"EC2":              instancesStats.Total,
+							"EC2Running":       instancesStats.Running,
+							"EC2RunningWindows": instancesStats.Windows,
 							"Region":            region,
 						}).Info(awsummary.Msg("EC2"))
 					}
-					totalEC2Number += rTotal
-					totalEC2RunningNumber += rRunning
-					totalEC2RunningWindowsNumber += rWindows
+					totalInstancesStats.Total += instancesStats.Total
+					totalInstancesStats.Running +=  instancesStats.Running
+					totalInstancesStats.Windows += instancesStats.Windows
 				}()
 
 				wg.Add(1)
@@ -101,16 +106,14 @@ func main() {
 				go func() {
 					defer wg.Done()
 					// Getting ELB data
-					rElbTotal, rElbWithoutEC2Total := awsummary.ListElb(region, verbose)
+					rElbTotal := sumelb.List(region, verbose)
 					if rElbTotal > 0 {
 						logs.WithFields(logs.Fields{
 							"ELB":      rElbTotal,
-							"ELBwoEC2": rElbWithoutEC2Total,
 							"Region":   region,
 						}).Info(awsummary.Msg("ELB"))
 					}
-					totalElbNumber += rElbTotal
-					totalElbWithoutEC2Number += rElbWithoutEC2Total
+					totalAlbNumber += rElbTotal
 				}()
 
 				// Getting RDS data
@@ -174,11 +177,10 @@ func main() {
 			wg.Wait()
 			logs.WithFields(logs.Fields{
 				"S3Buckets":         s3Number,
-				"EC2":               totalEC2Number,
-				"EC2Running":        totalEC2RunningNumber,
-				"EC2RunningWindows": totalEC2RunningWindowsNumber,
-				"ELB":               totalElbNumber,
-				"ELBwithoutEC2":     totalElbWithoutEC2Number,
+				"EC2":               totalInstancesStats.Total,
+				"EC2Running":        totalInstancesStats.Running,
+				"EC2RunningWindows": totalInstancesStats.Windows,
+				"ALB":               totalAlbNumber,
 				"ElasticsearchDomains:": totalESNumber,
 				"RDS":               totalRdsNumber,
 				"RDS_Oracle":        totalOrRdsNumber,
