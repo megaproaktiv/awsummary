@@ -1,0 +1,115 @@
+{
+    "LoadBalancers": [
+        {
+            "LoadBalancerArn": "arn:aws:elasticloadbalancing:eu-central-1:555544447777:loadbalancer/net/JohnnyrNetworkLB/80497435c9feea1a",
+            "DNSName": "JohnnyrNetworkLB-80497435c9feea1a.elb.eu-central-1.amazonaws.com",
+            "CanonicalHostedZoneId": "Z3F0SRJ5LGBH90",
+            "CreatedTime": "2021-03-18T18:04:30.077000+00:00",
+            "LoadBalancerName": "JohnnyrNetworkLB",
+            "Scheme": "internal",
+            "VpcId": "vpc-0ac94f937183d134a",
+            "State": {
+                "Code": "active"
+            },
+            "Type": "network",
+            "AvailabilityZones": [
+                {
+                    "ZoneName": "eu-central-1a",
+                    "SubnetId": "subnet-0bb17e18b875827fd",
+                    "LoadBalancerAddresses": []
+                },
+                {
+                    "ZoneName": "eu-central-1b",
+                    "SubnetId": "subnet-054633955f0e8114f",
+                    "LoadBalancerAddresses": []
+                }
+            ],
+            "IpAddressType": "ipv4"
+        },
+        {
+            "LoadBalancerArn": "arn:aws:elasticloadbalancing:eu-central-1:555544447777:loadbalancer/net/ApiSt-LB8A1-195PLFLWK7542/e176d33c38107bde",
+            "DNSName": "ApiSt-LB8A1-195PLFLWK7542-e176d33c38107bde.elb.eu-central-1.amazonaws.com",
+            "CanonicalHostedZoneId": "Z3F0SRJ5LGBH90",
+            "CreatedTime": "2021-07-05T09:44:23.968000+00:00",
+            "LoadBalancerName": "ApiSt-LB8A1-195PLFLWK7542",
+            "Scheme": "internet-facing",
+            "VpcId": "vpc-0ac94f937183d134a",
+            "State": {
+                "Code": "active"
+            },
+            "Type": "network",
+            "AvailabilityZones": [
+                {
+                    "ZoneName": "eu-central-1b",
+                    "SubnetId": "subnet-000966fc52fc99c68",
+                    "LoadBalancerAddresses": []
+                },
+                {
+                    "ZoneName": "eu-central-1a",
+                    "SubnetId": "subnet-0423ba043a4ef13b4",
+                    "LoadBalancerAddresses": []
+                }
+            ],
+            "IpAddressType": "ipv4"
+        },
+        {
+            "LoadBalancerArn": "arn:aws:elasticloadbalancing:eu-central-1:555544447777:loadbalancer/app/Loadb-LB8A1-1VWPKKOFYLUQP/ae27a3f775804633",
+            "DNSName": "Loadb-LB8A1-1VWPKKOFYLUQP-128020776.eu-central-1.elb.amazonaws.com",
+            "CanonicalHostedZoneId": "Z215JYRZR1TBD5",
+            "CreatedTime": "2021-02-03T13:40:02.310000+00:00",
+            "LoadBalancerName": "Loadb-LB8A1-1VWPKKOFYLUQP",
+            "Scheme": "internet-facing",
+            "VpcId": "vpc-0ac94f937183d134a",
+            "State": {
+                "Code": "active"
+            },
+            "Type": "application",
+            "AvailabilityZones": [
+                {
+                    "ZoneName": "eu-central-1b",
+                    "SubnetId": "subnet-000966fc52fc99c68",
+                    "LoadBalancerAddresses": []
+                },
+                {
+                    "ZoneName": "eu-central-1a",
+                    "SubnetId": "subnet-0423ba043a4ef13b4",
+                    "LoadBalancerAddresses": []
+                }
+            ],
+            "SecurityGroups": [
+                "sg-09305dfde6d4a1354"
+            ],
+            "IpAddressType": "ipv4"
+        },
+        {
+            "LoadBalancerArn": "arn:aws:elasticloadbalancing:eu-central-1:555544447777:loadbalancer/app/Clien-LB8A1-143JPWGD12726/dbc8c856b56654c7",
+            "DNSName": "Clien-LB8A1-143JPWGD12726-1023582876.eu-central-1.elb.amazonaws.com",
+            "CanonicalHostedZoneId": "Z215JYRZR1TBD5",
+            "CreatedTime": "2021-04-28T07:10:10.060000+00:00",
+            "LoadBalancerName": "Clien-LB8A1-143JPWGD12726",
+            "Scheme": "internet-facing",
+            "VpcId": "vpc-0ac94f937183d134a",
+            "State": {
+                "Code": "active"
+            },
+            "Type": "application",
+            "AvailabilityZones": [
+                {
+                    "ZoneName": "eu-central-1b",
+                    "SubnetId": "subnet-000966fc52fc99c68",
+                    "LoadBalancerAddresses": []
+                },
+                {
+                    "ZoneName": "eu-central-1a",
+                    "SubnetId": "subnet-0423ba043a4ef13b4",
+                    "LoadBalancerAddresses": []
+                }
+            ],
+            "SecurityGroups": [
+                "sg-0b8aff153908bd0f1",
+                "sg-0b645fef1be5a6970"
+            ],
+            "IpAddressType": "ipv4"
+        }
+    ]
+}

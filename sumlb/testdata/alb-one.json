@@ -1,0 +1,38 @@
+{
+    "LoadBalancers": [
+        {
+            "LoadBalancerArn": "arn:aws:elasticloadbalancing:eu-central-1:555544447777:loadbalancer/app/ALBGODEMO/504e73a11deaac62",
+            "DNSName": "ALBGODEMO-1785292042.eu-central-1.elb.amazonaws.com",
+            "CanonicalHostedZoneId": "Z215JYRZR1TBD5",
+            "CreatedTime": "2021-07-06T12:54:14.100000+00:00",
+            "LoadBalancerName": "ALBGODEMO",
+            "Scheme": "internet-facing",
+            "VpcId": "vpc-05e7612dd2ca5d873",
+            "State": {
+                "Code": "active"
+            },
+            "Type": "application",
+            "AvailabilityZones": [
+                {
+                    "ZoneName": "eu-central-1a",
+                    "SubnetId": "subnet-02b8d058d6d12ea98",
+                    "LoadBalancerAddresses": []
+                },
+                {
+                    "ZoneName": "eu-central-1b",
+                    "SubnetId": "subnet-0e115bbb54083d007",
+                    "LoadBalancerAddresses": []
+                },
+                {
+                    "ZoneName": "eu-central-1c",
+                    "SubnetId": "subnet-0f5d260093743f209",
+                    "LoadBalancerAddresses": []
+                }
+            ],
+            "SecurityGroups": [
+                "sg-0a87acecb7f205f4d"
+            ],
+            "IpAddressType": "ipv4"
+        }
+    ]
+}
