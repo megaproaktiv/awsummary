@@ -1,0 +1,27 @@
+{
+    "Table": {
+      
+        "TableName": "Customer",
+        "KeySchema": [
+            {
+                "AttributeName": "customerId",
+                "KeyType": "HASH"
+            }
+        ],
+        "TableStatus": "ACTIVE",
+        "CreationDateTime": "2021-05-27T15:03:26.199000+02:00",
+        "ProvisionedThroughput": {
+            "NumberOfDecreasesToday": 0,
+            "ReadCapacityUnits": 0,
+            "WriteCapacityUnits": 0
+        },
+        "TableSizeBytes": 122109273,
+        "ItemCount": 558236,
+        "TableArn": "arn:aws:dynamodb:eu-central-1:555555555555555:table/Customer",
+        "TableId": "07358dbe-5df7-4e73-a2bc-a0096bee4b08",
+        "BillingModeSummary": {
+            "BillingMode": "PAY_PER_REQUEST",
+            "LastUpdateToPayPerRequestDateTime": "2021-05-27T15:03:26.199000+02:00"
+        }
+    }
+}

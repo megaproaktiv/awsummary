@@ -17,9 +17,9 @@ func ListElasticsearchservice(region string, verbose bool) (esNumber int) {
 	}
 
 	for domain := range resp.DomainNames {
-		esNumber ++
+		esNumber++
 		if verbose {
-			log.Println("-->Domain Name: ",domain)
+			log.Println("-->Domain Name: ", domain)
 		}
 	}
 	// resp has all of the response data, pull out instance IDs:

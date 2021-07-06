@@ -1,25 +1,19 @@
-[![Build Status](https://semaphoreci.com/api/v1/partamonov/aws-overview/branches/master/badge.svg)](https://semaphoreci.com/partamonov/aws-overview)
+# awssummary
 
-# aws-overview
+`awssummary` is a script to get a fast (< 3 seconds) AWS account overview of pricey or often used services in all 13 regions.
 
-``aws-overview`` is a small script to get AWS account overview.
 Available details are (number of):
 * EC2, EC2 Running instances, EC2 Windows running instances
-* ELB, ELB without assigned EC2 instances
+* Application LB, Gateway LB, Network LB
 * Elasticsearch Domains
 * RDS, RDS MySQL/MSSQL/Oracle
+* dynamodb reserved (pay while idle!) and on demand capacity
 * CFN
 * Lambda functions
 * S3 buckets
 * Total of all above in all regions
 
-## Installing
 
-* ``go get github.com/tecracer/aws-overview``
-* ``go install github.com/tecracer/aws-overview``
-
-For cross platform compilation:
-* ``env GOOS=windows GOARCH=amd64 go build``
 
 ## Usage
 

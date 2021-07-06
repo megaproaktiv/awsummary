@@ -49,7 +49,10 @@ func List(region string, verbose bool) (LBV2Totals) {
 		PageSize: aws.Int32(100),
 	}
 
-	resp, err := Client.DescribeLoadBalancers(context.TODO(), params)
+	resp, err := Client.DescribeLoadBalancers(context.TODO(), params,
+	func( o *elbv2.Options){
+		o.Region = region
+	})
 	if err != nil {
 		log.Fatal("Cannot get ALB data: ", err)
 	}

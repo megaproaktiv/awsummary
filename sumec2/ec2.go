@@ -2,11 +2,13 @@ package sumec2
 
 import (
 	"context"
+	"log"
+	"strings"
+
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	"github.com/megaproaktiv/awsummary"
-	"log"
 )
 
 var Client Ec2Interface
@@ -60,9 +62,11 @@ func List(region string, verbose bool) (InstancesTotals) {
 	for idx := range resp.Reservations {
 		for _, inst := range resp.Reservations[idx].Instances {
 			totals.Total++
-			if inst.State.Name == types.InstanceStateNameRunning {
+			if  strings.EqualFold( string(inst.State.Name), string( types.InstanceStateNameRunning)) {
 				totals.Running++
-				if inst.Platform == types.PlatformValuesWindows {
+				if strings.EqualFold( 
+					string(inst.Platform) ,
+				 	string(types.PlatformValuesWindows)) {
 					totals.Windows++
 				}
 			}

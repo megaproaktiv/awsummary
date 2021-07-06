@@ -25,14 +25,24 @@ func TestListEC2(t *testing.T) {
 		wantEc2RunningWindows int
 	}{
 		{
-		name: "Alle Instances",
+		name: "One Instance",
 		args: args{
-			region: "eu-central-1",
 			verbose: false,
+			region: "eu-central-1",
 		},
 		wantEc2Number: 1,
 		wantEc2RunningNumber: 1,
 		wantEc2RunningWindows: 0,
+		},
+		{
+		name: "Windows and Linux",
+		args: args{
+			region: "eu-central-1",
+			verbose: false,
+		},
+		wantEc2Number: 7,
+		wantEc2RunningNumber: 5,
+		wantEc2RunningWindows: 3,
 		},
 	}
 	mockedEc2Interface := &Ec2InterfaceMock{
@@ -47,8 +57,27 @@ func TestListEC2(t *testing.T) {
 			return &output,nil		
 		},
 	}
-	SetClient(mockedEc2Interface)
-	for _, tt := range tests {
+	mockedEc2InterfaceWindows := &Ec2InterfaceMock{
+		DescribeInstancesFunc: func(ctx context.Context, params *ec2.DescribeInstancesInput, optFns ...func(*ec2.Options)) (*ec2.DescribeInstancesOutput, error) {
+			var output ec2.DescribeInstancesOutput
+			data, err := os.ReadFile("testdata/somewindowsec2.json")
+			if err != nil {
+				t.Error("Cant read input testdata")
+				t.Error(err)
+			}
+			json.Unmarshal(data, &output);
+			return &output,nil		
+		},
+	}
+	for i, tt := range tests {
+		if i == 0 {
+			SetClient(mockedEc2Interface)
+		}
+		
+		if i == 1 {
+			SetClient(mockedEc2InterfaceWindows)
+		}
+		
 		t.Run(tt.name, func(t *testing.T) {
 			totals := List(tt.args.region, tt.args.verbose)
 			gotEc2Number := totals.Total

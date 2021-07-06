@@ -1,0 +1,6 @@
+{
+    "TableNames": [
+        "Customer",
+        "Order"
+    ]
+}
