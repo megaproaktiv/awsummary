@@ -1,0 +1,146 @@
+{
+    "Reservations": [
+        {
+            "Groups": [],
+            "Instances": [
+                {
+                    "AmiLaunchIndex": 0,
+                    "ImageId": "ami-089b5384aac360007",
+                    "InstanceId": "i-0023ef69c6a570b30",
+                    "InstanceType": "t2.micro",
+                    "LaunchTime": "2021-07-06T12:55:52+00:00",
+                    "Monitoring": {
+                        "State": "enabled"
+                    },
+                    "Placement": {
+                        "AvailabilityZone": "eu-central-1a",
+                        "GroupName": "",
+                        "Tenancy": "default"
+                    },
+                    "PrivateDnsName": "ip-10-0-124-181.eu-central-1.compute.internal",
+                    "PrivateIpAddress": "10.0.124.181",
+                    "ProductCodes": [],
+                    "PublicDnsName": "",
+                    "State": {
+                        "Code": 16,
+                        "Name": "running"
+                    },
+                    "StateTransitionReason": "",
+                    "SubnetId": "subnet-03a6b7f6e6b0e201d",
+                    "VpcId": "vpc-05e7612dd2ca5d873",
+                    "Architecture": "x86_64",
+                    "BlockDeviceMappings": [
+                        {
+                            "DeviceName": "/dev/xvda",
+                            "Ebs": {
+                                "AttachTime": "2021-07-06T12:55:52+00:00",
+                                "DeleteOnTermination": true,
+                                "Status": "attached",
+                                "VolumeId": "vol-072d689940539f5f5"
+                            }
+                        }
+                    ],
+                    "ClientToken": "c935e9ef-8e5c-fe49-7296-cdbe0459da9f",
+                    "EbsOptimized": false,
+                    "EnaSupport": true,
+                    "Hypervisor": "xen",
+                    "IamInstanceProfile": {
+                        "Arn": "arn:aws:iam::555544447777:instance-profile/AlbInstStack-ASGInstanceProfile0A2834D7-UCNZWJQTSDG8",
+                        "Id": "AIPAZXXUIISUYLGCT2UWM"
+                    },
+                    "NetworkInterfaces": [
+                        {
+                            "Attachment": {
+                                "AttachTime": "2021-07-06T12:55:52+00:00",
+                                "AttachmentId": "eni-attach-03985e28ed31e5c03",
+                                "DeleteOnTermination": true,
+                                "DeviceIndex": 0,
+                                "Status": "attached",
+                                "NetworkCardIndex": 0
+                            },
+                            "Description": "",
+                            "Groups": [
+                                {
+                                    "GroupName": "AlbInstStack-ASGInstanceSecurityGroup0525485D-1C5QYCDV90R6R",
+                                    "GroupId": "sg-07fe7ba56e9318c55"
+                                }
+                            ],
+                            "Ipv6Addresses": [],
+                            "MacAddress": "02:54:0f:e0:56:74",
+                            "NetworkInterfaceId": "eni-0fc26577893dbf643",
+                            "OwnerId": "555544447777",
+                            "PrivateDnsName": "ip-10-0-124-181.eu-central-1.compute.internal",
+                            "PrivateIpAddress": "10.0.124.181",
+                            "PrivateIpAddresses": [
+                                {
+                                    "Primary": true,
+                                    "PrivateDnsName": "ip-10-0-124-181.eu-central-1.compute.internal",
+                                    "PrivateIpAddress": "10.0.124.181"
+                                }
+                            ],
+                            "SourceDestCheck": true,
+                            "Status": "in-use",
+                            "SubnetId": "subnet-03a6b7f6e6b0e201d",
+                            "VpcId": "vpc-05e7612dd2ca5d873",
+                            "InterfaceType": "interface"
+                        }
+                    ],
+                    "RootDeviceName": "/dev/xvda",
+                    "RootDeviceType": "ebs",
+                    "SecurityGroups": [
+                        {
+                            "GroupName": "AlbInstStack-ASGInstanceSecurityGroup0525485D-1C5QYCDV90R6R",
+                            "GroupId": "sg-07fe7ba56e9318c55"
+                        }
+                    ],
+                    "SourceDestCheck": true,
+                    "Tags": [
+                        {
+                            "Key": "Name",
+                            "Value": "AlbInstStack/ASG"
+                        },
+                        {
+                            "Key": "aws:cloudformation:stack-name",
+                            "Value": "AlbInstStack"
+                        },
+                        {
+                            "Key": "aws:cloudformation:stack-id",
+                            "Value": "arn:aws:cloudformation:eu-central-1:555544447777:stack/AlbInstStack/0ab43550-de59-11eb-b86d-0ac31c9bb5d8"
+                        },
+                        {
+                            "Key": "aws:autoscaling:groupName",
+                            "Value": "autoscalingGroupCDKDEMO"
+                        },
+                        {
+                            "Key": "aws:cloudformation:logical-id",
+                            "Value": "ASG46ED3070"
+                        }
+                    ],
+                    "VirtualizationType": "hvm",
+                    "CpuOptions": {
+                        "CoreCount": 1,
+                        "ThreadsPerCore": 1
+                    },
+                    "CapacityReservationSpecification": {
+                        "CapacityReservationPreference": "open"
+                    },
+                    "HibernationOptions": {
+                        "Configured": false
+                    },
+                    "MetadataOptions": {
+                        "State": "applied",
+                        "HttpTokens": "optional",
+                        "HttpPutResponseHopLimit": 1,
+                        "HttpEndpoint": "enabled"
+                    },
+                    "EnclaveOptions": {
+                        "Enabled": false
+                    }
+                }
+            ],
+            "OwnerId": "555544447777",
+            "RequesterId": "053592188284",
+            "ReservationId": "r-01d657e4eb48f1a12"
+        }
+    ]
+}
