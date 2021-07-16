@@ -47,6 +47,7 @@ var (
 	totalCfnNumber                                                       int
 	totalDynamoDBStat sumdynamodb.DynamoDBTotals
 	totalInstancesStats                                                  sumec2.InstancesTotals
+	totalNatgatewayStats	sumec2.NatGatewayTotals
 	totalLambdaNumber                                                    int
 	totalLbStats                                                         sumlb.LBV2Totals
 	totalRdsNumber, totalOrRdsNumber, totalMyRdsNumber, totalMsRdsNumber int
@@ -88,7 +89,7 @@ func main() {
 				calcInstances := func() {
 					defer wg.Done()
 					// Getting EC2 data
-					instancesStats := sumec2.List(region, verbose)
+					instancesStats := sumec2.ListInstances(region, verbose)
 					if instancesStats.Total > 0 {
 						logs.WithFields(logs.Fields{
 							"EC2":               instancesStats.Total,
@@ -205,6 +206,22 @@ func main() {
 				wg.Add(1)
 				_ = pool.Submit(calcDynamodb)
 
+				calcNatGW := func(){
+					defer wg.Done()
+					natgatewayStats, err :=  sumec2.ListNatGW(region, verbose)
+					if err  != nil {
+						log.Fatal("Cannot get NatGateway data: ", err)
+					}
+					if natgatewayStats.Total > 0 {
+						totalNatgatewayStats.Total += natgatewayStats.Total
+						logs.WithFields(logs.Fields{
+							"NatGW":             natgatewayStats.Total,
+							"Region":            region,
+						}).Info(awsummary.Msg("NGW"))
+					}
+				}
+				wg.Add(1)
+				_ = pool.Submit(calcNatGW)
 
 			}
 			// We do not care about region here, as we will get all
@@ -220,6 +237,8 @@ func main() {
 			wg.Add(1)
 			_ = pool.Submit(calcS3)
 
+
+
 			wg.Wait()
 
 			logs.WithFields(logs.Fields{
@@ -227,6 +246,7 @@ func main() {
 				"EC2":                   totalInstancesStats.Total,
 				"EC2Running":            totalInstancesStats.Running,
 				"EC2RunningWindows":     totalInstancesStats.Windows,
+				"NatGW":				 totalNatgatewayStats.Total,
 				"ALB":                   totalLbStats.Application,
 				"GLB":                   totalLbStats.Gateway,
 				"NLB":                   totalLbStats.Network,

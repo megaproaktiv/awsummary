@@ -22,6 +22,9 @@ var _ Ec2Interface = &Ec2InterfaceMock{}
 //             DescribeInstancesFunc: func(ctx context.Context, params *ec2.DescribeInstancesInput, optFns ...func(*ec2.Options)) (*ec2.DescribeInstancesOutput, error) {
 // 	               panic("mock out the DescribeInstances method")
 //             },
+//             DescribeNatGatewaysFunc: func(ctx context.Context, params *ec2.DescribeNatGatewaysInput, optFns ...func(*ec2.Options)) (*ec2.DescribeNatGatewaysOutput, error) {
+// 	               panic("mock out the DescribeNatGateways method")
+//             },
 //         }
 //
 //         // use mockedEc2Interface in code that requires Ec2Interface
@@ -31,6 +34,9 @@ var _ Ec2Interface = &Ec2InterfaceMock{}
 type Ec2InterfaceMock struct {
 	// DescribeInstancesFunc mocks the DescribeInstances method.
 	DescribeInstancesFunc func(ctx context.Context, params *ec2.DescribeInstancesInput, optFns ...func(*ec2.Options)) (*ec2.DescribeInstancesOutput, error)
+
+	// DescribeNatGatewaysFunc mocks the DescribeNatGateways method.
+	DescribeNatGatewaysFunc func(ctx context.Context, params *ec2.DescribeNatGatewaysInput, optFns ...func(*ec2.Options)) (*ec2.DescribeNatGatewaysOutput, error)
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -43,8 +49,18 @@ type Ec2InterfaceMock struct {
 			// OptFns is the optFns argument value.
 			OptFns []func(*ec2.Options)
 		}
+		// DescribeNatGateways holds details about calls to the DescribeNatGateways method.
+		DescribeNatGateways []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Params is the params argument value.
+			Params *ec2.DescribeNatGatewaysInput
+			// OptFns is the optFns argument value.
+			OptFns []func(*ec2.Options)
+		}
 	}
-	lockDescribeInstances sync.RWMutex
+	lockDescribeInstances   sync.RWMutex
+	lockDescribeNatGateways sync.RWMutex
 }
 
 // DescribeInstances calls DescribeInstancesFunc.
@@ -83,5 +99,44 @@ func (mock *Ec2InterfaceMock) DescribeInstancesCalls() []struct {
 	mock.lockDescribeInstances.RLock()
 	calls = mock.calls.DescribeInstances
 	mock.lockDescribeInstances.RUnlock()
+	return calls
+}
+
+// DescribeNatGateways calls DescribeNatGatewaysFunc.
+func (mock *Ec2InterfaceMock) DescribeNatGateways(ctx context.Context, params *ec2.DescribeNatGatewaysInput, optFns ...func(*ec2.Options)) (*ec2.DescribeNatGatewaysOutput, error) {
+	if mock.DescribeNatGatewaysFunc == nil {
+		panic("Ec2InterfaceMock.DescribeNatGatewaysFunc: method is nil but Ec2Interface.DescribeNatGateways was just called")
+	}
+	callInfo := struct {
+		Ctx    context.Context
+		Params *ec2.DescribeNatGatewaysInput
+		OptFns []func(*ec2.Options)
+	}{
+		Ctx:    ctx,
+		Params: params,
+		OptFns: optFns,
+	}
+	mock.lockDescribeNatGateways.Lock()
+	mock.calls.DescribeNatGateways = append(mock.calls.DescribeNatGateways, callInfo)
+	mock.lockDescribeNatGateways.Unlock()
+	return mock.DescribeNatGatewaysFunc(ctx, params, optFns...)
+}
+
+// DescribeNatGatewaysCalls gets all the calls that were made to DescribeNatGateways.
+// Check the length with:
+//     len(mockedEc2Interface.DescribeNatGatewaysCalls())
+func (mock *Ec2InterfaceMock) DescribeNatGatewaysCalls() []struct {
+	Ctx    context.Context
+	Params *ec2.DescribeNatGatewaysInput
+	OptFns []func(*ec2.Options)
+} {
+	var calls []struct {
+		Ctx    context.Context
+		Params *ec2.DescribeNatGatewaysInput
+		OptFns []func(*ec2.Options)
+	}
+	mock.lockDescribeNatGateways.RLock()
+	calls = mock.calls.DescribeNatGateways
+	mock.lockDescribeNatGateways.RUnlock()
 	return calls
 }

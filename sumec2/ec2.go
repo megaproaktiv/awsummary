@@ -34,12 +34,20 @@ type InstancesTotals struct{
 	Windows  int
 }
 
+type NatGatewayTotals struct{
+	Total int
+	
+}
+
 //go:generate moq -out ec2_moq.go -pkg sumec2 . Ec2Interface
 
 type Ec2Interface interface {
 	DescribeInstances(ctx context.Context,
 		params *ec2.DescribeInstancesInput, optFns ...func(*ec2.Options)) (*ec2.DescribeInstancesOutput,
 		error)
+	DescribeNatGateways(ctx context.Context,
+		params *ec2.DescribeNatGatewaysInput, optFns ...func(*ec2.Options)) ( *ec2.DescribeNatGatewaysOutput, error)	
+
 }
 
 
@@ -48,7 +56,7 @@ func SetClient(c Ec2Interface) {
 	Client = c
 }
 
-func List(region string, verbose bool) (InstancesTotals) {
+func ListInstances(region string, verbose bool) (InstancesTotals) {
 
 	resp, err := Client.DescribeInstances(context.TODO(), nil,  
 	func(o *ec2.Options) {
@@ -87,4 +95,23 @@ func List(region string, verbose bool) (InstancesTotals) {
 		}
 	}
 	return totals
+}
+
+
+func ListNatGW(region string, verbose bool) (NatGatewayTotals, error) {
+
+	var totals = NatGatewayTotals{}
+	resp, err := Client.DescribeNatGateways(context.TODO(), nil,  
+	func(o *ec2.Options) {
+		o.Region = region
+	} )
+	if err != nil {
+		log.Fatal("Cannot get EC2 data: ", err)
+		return totals, err
+	}
+	// resp has all of the response data, pull out instance IDs:
+	
+	length := len(resp.NatGateways)
+	totals.Total = length
+	return totals, nil
 }

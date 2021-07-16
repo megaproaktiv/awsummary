@@ -5,9 +5,10 @@ import (
 	"encoding/json"
 	"os"
 	"testing"
-//	"gotest.tools/v3/assert"
-	"github.com/aws/aws-sdk-go-v2/service/ec2"
 
+	//	"gotest.tools/v3/assert"
+	"github.com/aws/aws-sdk-go-v2/service/ec2"
+	"gotest.tools/v3/assert"
 )
 
 func TestListEC2(t *testing.T) {
@@ -56,6 +57,9 @@ func TestListEC2(t *testing.T) {
 			json.Unmarshal(data, &output);
 			return &output,nil		
 		},
+		DescribeNatGatewaysFunc: func(ctx context.Context, params *ec2.DescribeNatGatewaysInput, optFns ...func(*ec2.Options)) (*ec2.DescribeNatGatewaysOutput, error) {
+			panic("mock out the DescribeNatGateways method")
+		},
 	}
 	mockedEc2InterfaceWindows := &Ec2InterfaceMock{
 		DescribeInstancesFunc: func(ctx context.Context, params *ec2.DescribeInstancesInput, optFns ...func(*ec2.Options)) (*ec2.DescribeInstancesOutput, error) {
@@ -68,6 +72,9 @@ func TestListEC2(t *testing.T) {
 			json.Unmarshal(data, &output);
 			return &output,nil		
 		},
+		DescribeNatGatewaysFunc: func(ctx context.Context, params *ec2.DescribeNatGatewaysInput, optFns ...func(*ec2.Options)) (*ec2.DescribeNatGatewaysOutput, error) {
+		panic("mock out the DescribeNatGateways method")
+	},
 	}
 	for i, tt := range tests {
 		if i == 0 {
@@ -79,7 +86,7 @@ func TestListEC2(t *testing.T) {
 		}
 		
 		t.Run(tt.name, func(t *testing.T) {
-			totals := List(tt.args.region, tt.args.verbose)
+			totals := ListInstances(tt.args.region, tt.args.verbose)
 			gotEc2Number := totals.Total
 			gotEc2RunningNumber := totals.Running
 			gotEc2RunningWindows := totals.Windows
@@ -94,4 +101,49 @@ func TestListEC2(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestListNatGW(t *testing.T){
+	os.Setenv("AUTO_INIT", "false")
+	var region = "eu-central-1"
+		mockedEc2InterfaceTwo := &Ec2InterfaceMock{
+            DescribeInstancesFunc: func(ctx context.Context, params *ec2.DescribeInstancesInput, optFns ...func(*ec2.Options)) (*ec2.DescribeInstancesOutput, error) {
+	               panic("mock out the DescribeInstances method")
+            },
+            DescribeNatGatewaysFunc: func(ctx context.Context, params *ec2.DescribeNatGatewaysInput, optFns ...func(*ec2.Options)) (*ec2.DescribeNatGatewaysOutput, error) {
+				var output ec2.DescribeNatGatewaysOutput
+				data, err := os.ReadFile("testdata/nat-gateway-two.json")
+				if err != nil {
+					t.Error("Cant read input testdata")
+					t.Error(err)
+				}
+				json.Unmarshal(data, &output);
+				return &output,nil	
+            },
+        }
+		mockedEc2InterfaceNone := &Ec2InterfaceMock{
+            DescribeInstancesFunc: func(ctx context.Context, params *ec2.DescribeInstancesInput, optFns ...func(*ec2.Options)) (*ec2.DescribeInstancesOutput, error) {
+	               panic("mock out the DescribeInstances method")
+            },
+            DescribeNatGatewaysFunc: func(ctx context.Context, params *ec2.DescribeNatGatewaysInput, optFns ...func(*ec2.Options)) (*ec2.DescribeNatGatewaysOutput, error) {
+				var output ec2.DescribeNatGatewaysOutput
+				data, err := os.ReadFile("testdata/nat-gateway-none.json")
+				if err != nil {
+					t.Error("Cant read input testdata")
+					t.Error(err)
+				}
+				json.Unmarshal(data, &output);
+				return &output,nil	
+            },
+        }
+		SetClient(mockedEc2InterfaceTwo)
+		
+		expect := 2
+		got := ListNatGW(region, false)
+		assert.Equal(t, expect, got.Total, "Number should be 2")
+
+		SetClient(mockedEc2InterfaceNone)
+		expect = 0
+		got = ListNatGW(region, false)
+		assert.Equal(t, expect, got.Total, "Number should be 0")
 }

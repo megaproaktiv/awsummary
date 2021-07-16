@@ -1,0 +1,80 @@
+{
+    "NatGateways": [
+        {
+            "CreateTime": "2021-04-29T08:11:31+00:00",
+            "NatGatewayAddresses": [
+                {
+                    "AllocationId": "eipalloc-e1b4c6d9",
+                    "NetworkInterfaceId": "eni-07d52dbf27ab62359",
+                    "PrivateIp": "10.0.16.180",
+                    "PublicIp": "18.195.122.207"
+                }
+            ],
+            "NatGatewayId": "nat-0e6856b98bed9c905",
+            "State": "available",
+            "SubnetId": "subnet-04ffbfee039cf5010",
+            "VpcId": "vpc-02c2e845606124907",
+            "Tags": [
+                {
+                    "Key": "aws:cloudformation:stack-name",
+                    "Value": "TestStack"
+                },
+                {
+                    "Key": "aws:cloudformation:logical-id",
+                    "Value": "baseVPCingressaSubnet1NATGateway763471D2"
+                },
+                {
+                    "Key": "project",
+                    "Value": "pps"
+                },
+                {
+                    "Key": "aws:cloudformation:stack-id",
+                    "Value": "arn:aws:cloudformation:eu-central-1:669453403305:stack/TestStack/5fe2e840-a8c2-11eb-8f6b-0a32025e35d4"
+                },
+                {
+                    "Key": "Name",
+                    "Value": "TestStack/baseVPC/ingressaSubnet1"
+                }
+            ],
+            "ConnectivityType": "public"
+        },
+        {
+            "CreateTime": "2021-04-29T08:11:31+00:00",
+            "NatGatewayAddresses": [
+                {
+                    "AllocationId": "eipalloc-cfa8daf7",
+                    "NetworkInterfaceId": "eni-0885937177268240d",
+                    "PrivateIp": "10.0.17.147",
+                    "PublicIp": "3.124.136.194"
+                }
+            ],
+            "NatGatewayId": "nat-0ba1926d8f56babe3",
+            "State": "available",
+            "SubnetId": "subnet-00730d323ecffa1e8",
+            "VpcId": "vpc-02c2e845606124907",
+            "Tags": [
+                {
+                    "Key": "aws:cloudformation:stack-name",
+                    "Value": "TestStack"
+                },
+                {
+                    "Key": "aws:cloudformation:logical-id",
+                    "Value": "baseVPCingressaSubnet2NATGateway13B0A571"
+                },
+                {
+                    "Key": "project",
+                    "Value": "pps"
+                },
+                {
+                    "Key": "aws:cloudformation:stack-id",
+                    "Value": "arn:aws:cloudformation:eu-central-1:669453403305:stack/TestStack/5fe2e840-a8c2-11eb-8f6b-0a32025e35d4"
+                },
+                {
+                    "Key": "Name",
+                    "Value": "TestStack/baseVPC/ingressaSubnet2"
+                }
+            ],
+            "ConnectivityType": "public"
+        }
+    ]
+}
