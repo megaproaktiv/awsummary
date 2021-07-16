@@ -110,8 +110,13 @@ func ListNatGW(region string, verbose bool) (NatGatewayTotals, error) {
 		return totals, err
 	}
 	// resp has all of the response data, pull out instance IDs:
+	count := 0
+	for _, gateway := range resp.NatGateways {
+		if gateway.State == types.NatGatewayStatePending || gateway.State == types.NatGatewayStateAvailable {
+			count++
+		}
+	}
 	
-	length := len(resp.NatGateways)
-	totals.Total = length
+	totals.Total = count
 	return totals, nil
 }

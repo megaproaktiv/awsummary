@@ -139,11 +139,35 @@ func TestListNatGW(t *testing.T){
 		SetClient(mockedEc2InterfaceTwo)
 		
 		expect := 2
-		got := ListNatGW(region, false)
+		got,err  := ListNatGW(region, false)
+		assert.NilError(t, err)
 		assert.Equal(t, expect, got.Total, "Number should be 2")
-
+		
 		SetClient(mockedEc2InterfaceNone)
 		expect = 0
-		got = ListNatGW(region, false)
+		got,err = ListNatGW(region, false)
+		assert.NilError(t, err)
 		assert.Equal(t, expect, got.Total, "Number should be 0")
-}
+
+		mockedEc2InterfaceDeleted := &Ec2InterfaceMock{
+			DescribeInstancesFunc: func(ctx context.Context, params *ec2.DescribeInstancesInput, optFns ...func(*ec2.Options)) (*ec2.DescribeInstancesOutput, error) {
+				   panic("mock out the DescribeInstances method")
+			},
+			DescribeNatGatewaysFunc: func(ctx context.Context, params *ec2.DescribeNatGatewaysInput, optFns ...func(*ec2.Options)) (*ec2.DescribeNatGatewaysOutput, error) {
+				var output ec2.DescribeNatGatewaysOutput
+				data, err := os.ReadFile("testdata/nat-gateway-deleted.json")
+				if err != nil {
+					t.Error("Cant read input testdata")
+					t.Error(err)
+				}
+				json.Unmarshal(data, &output);
+				return &output,nil	
+			},
+		}
+		SetClient(mockedEc2InterfaceDeleted)
+		expect = 0
+		got,err = ListNatGW(region, false)
+		assert.NilError(t, err)
+
+		assert.Equal(t, expect, got.Total, "Number should be 0")		
+	}
